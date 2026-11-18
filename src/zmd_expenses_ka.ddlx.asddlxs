@@ -1,0 +1,140 @@
+@Metadata.layer: #CORE
+
+@UI.presentationVariant: [{
+    sortOrder: [{
+        by: 'claim_number',
+        direction: #DESC     }] }]    
+    
+ 
+@UI.headerInfo: { 
+        title: { value: 'employee_name' },
+        description: { value: 'claim_number' } }
+
+@Search.searchable: true
+annotate entity ZC_EXPENSE_KA
+    with 
+{
+    @UI.facet: [
+    
+    { id: 'EXPENSE', position: 10, label: 'EXPENSE Information',
+       purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE },
+       
+    {id: 'EXPENSELINE', position: 20, label: 'EXPENSE LINE Information',
+       purpose: #STANDARD, type: #LINEITEM_REFERENCE, 
+       targetElement: '_ZR_EXPENSE_LINE_KA'  },  
+        
+    {  position: 30, label: 'Admin', type: #FIELDGROUP_REFERENCE,
+      targetQualifier: 'Info'} ]
+
+
+  @UI.hidden: true
+   ex_claim;
+   
+  @Search.defaultSearchElement: true
+  @UI.lineItem: [{ position: 10 },  
+  { position: 20, label: 'Submit', type: #FOR_ACTION, dataAction: 'Submit' },
+  { position: 30, label: 'Approved', type: #FOR_ACTION, dataAction: 'Approved' },
+  { position: 40, label: 'Rejected', type: #FOR_ACTION, dataAction: 'Rejected' },
+  { position: 50, label: 'Paid', type: #FOR_ACTION, dataAction: 'Paid' },
+  { position: 60, label: 'Withdraw', type: #FOR_ACTION, dataAction: 'Withdraw' },
+  { position: 70, label: 'Mass Approval', type: #FOR_ACTION, dataAction: 'Mass_approval' },
+  { position: 80, label: 'Copy Claim', type: #FOR_ACTION, dataAction: 'CopyClaim' }  ] 
+  @UI.identification: [{ position: 10 }]
+  @UI.selectionField: [{ position: 10 }]
+  @Search.fuzzinessThreshold: 0.8
+  @EndUserText.label: 'CLAIM NUMBER'
+  @Consumption.valueHelpDefinition: [{ entity : { name: 'ZR_EXPENSE_KA' , element: 'claim_number' } }] 
+   claim_number;
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+  @Search.defaultSearchElement: true
+  @Search.fuzzinessThreshold: 0.8
+    @UI.selectionField: [{ position: 20 }]
+  @EndUserText.label: 'EMPLOYEE NAME' 
+   employee_name;
+  @UI.lineItem: [{ position: 30, cssDefault.width: '10em' }]
+  @UI.identification: [{ position: 30 }]
+    @UI.selectionField: [{ position: 30 }]
+  @EndUserText.label: 'TRIP PURPOSE' 
+   trip_purpose;
+     @UI.lineItem: [{ position: 40, cssDefault.width: '10em' }]
+  @UI.identification: [{ position: 40 }]
+  @EndUserText.label: 'Destination Country' 
+  @Consumption.valueHelpDefinition: [{ entity: 
+  { name: 'ZI_COUNTRY_KA', element: 'Description'  }
+   }]
+  @Search.defaultSearchElement: true
+  @Search.fuzzinessThreshold: 0.8
+  @UI.selectionField: [{ position: 40 }]
+   destination_country;
+  @UI.lineItem: [{ position: 50, cssDefault.width: '10em' }]
+  @UI.identification: [{ position: 50 }]
+  @EndUserText.label: 'Trip Start Date'
+    @Search.defaultSearchElement: true
+  @Search.fuzzinessThreshold: 0.8
+  @UI.selectionField: [{ position: 50 }] 
+   trip_start_date;
+     @UI.lineItem: [{ position: 60, cssDefault.width: '10em' }]
+  @UI.identification: [{ position: 60 }]
+  @EndUserText.label: 'Trip End Date' 
+  @UI.selectionField: [{ position: 60 }]
+   trip_end_date;
+  @UI.lineItem: [{ position: 70, cssDefault.width: '10em' }]
+  @UI.identification: [{ position: 70 , importance: #HIGH}]
+  @EndUserText.label: 'Currency' 
+  @Consumption.valueHelpDefinition: [{ entity: 
+  { name: 'I_CurrencyStdVH', element: 'Currency'  }
+   }]
+  
+   currency;
+     @UI.lineItem: [{ position: 80, cssDefault.width: '10em' }]
+  @UI.identification: [{ position: 80 }]
+  @EndUserText.label: 'Total Amount' 
+  @Search.defaultSearchElement: true
+  @UI.selectionField: [{ position: 70 }]
+   total_amount;
+     @UI.lineItem: [{ position: 90, cssDefault.width: '10em', criticality: 'colors' }]
+  @UI.identification: [{ position: 90, criticality: 'colors' }]
+  @EndUserText.label: 'Status' 
+  @Search.defaultSearchElement: true
+  @Search.fuzzinessThreshold: 0.8
+  @UI.selectionField: [{ position: 80 }]
+   status;
+   @UI.hidden: true
+   colors;
+     @UI.lineItem: [{ position:100, cssDefault.width: '10em' }]
+  @UI.identification: [{ position: 100 }]
+  @EndUserText.label: 'Submitted On' 
+   submitted_on;
+     @UI.lineItem: [{ position: 110, cssDefault.width: '10em' }]
+  @UI.identification: [{ position: 110 }]
+  @EndUserText.label: 'Decision Date' 
+   decision_date;
+     @UI.lineItem: [{ position: 120, cssDefault.width: '10em' }]
+  @UI.identification: [{ position: 120 }]
+  @EndUserText.label: 'Rejection Reason' 
+   rejection_reason;
+     @UI.lineItem: [{ position: 130, cssDefault.width: '10em' }]
+  @UI.identification: [{ position: 130 }]
+  @EndUserText.label: 'Payment Reference' 
+   payment_reference;
+     @UI.lineItem: [{ position: 140, cssDefault.width: '10em' }]
+  @UI.identification: [{ position: 140 }]
+  @EndUserText.label: 'Payment Date' 
+   payment_date_2;
+   
+   @UI.hidden: true
+   payment_date;
+
+
+  @UI.fieldGroup: [{ qualifier: 'Info', position: 10 }]
+  last_change_by;
+  @UI.fieldGroup: [{ qualifier: 'Info', position: 20 }]
+  last_change_on;  
+  @UI.fieldGroup: [{ qualifier: 'Info', position: 30 }]
+  created_by;
+  @UI.fieldGroup: [{ qualifier: 'Info', position: 10 }]
+  created_on;
+
+    
+}

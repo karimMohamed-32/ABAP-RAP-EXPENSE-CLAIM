@@ -1,0 +1,40 @@
+@Metadata.layer: #CORE 
+@UI.headerInfo: { typeName: 'RECEIPT', typeNamePlural: 'RECEIPT INFO',
+                  title: { value: 'file_name' } }
+annotate entity ZC_RECEIPT_KA
+    with 
+{
+
+@UI.facet: [{ id: 'RECEIPT', label: 'RECEIPT', position: 10, 
+            purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE  }]
+
+   @UI.hidden: true
+   receipt_uuid;
+    @UI.hidden: true  
+   line_number;
+      @UI.hidden: true
+   ex_claim;
+   @UI.lineItem: [{ position: 10 }]
+   @UI.identification: [{ position: 10 }]
+   @EndUserText.label: 'Receipt File'
+   receipt_file;
+ @UI.hidden: true
+   file_name;
+   @UI.hidden: true
+   mimetype;
+   @UI.lineItem: [{ position: 30 }]
+   @UI.identification: [{ position: 30 }]
+   @EndUserText.label:'NOTE'   
+   note;
+   @UI.lineItem: [{ position: 40 }]
+   @UI.identification: [{ position: 40 }]
+   @EndUserText.label: 'UPLOADED BY'
+   uploaded_by;
+   @UI.lineItem: [{ position: 50 }]
+   @UI.identification: [{ position: 50 }]
+   @EndUserText.label: 'UPLOADED ON'   
+   uploaded_on;
+   @UI.hidden: true
+   local_last_change;
+    
+}

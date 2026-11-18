@@ -1,0 +1,43 @@
+projection;
+strict;
+use draft;
+
+define behavior for ZC_EXPENSE_KA //alias <alias_name>
+{
+  use create;
+  use update;
+  use delete;
+
+  use action Activate;
+  use action Discard;
+  use action Edit;
+  use action Resume;
+  use action Prepare;
+
+  use action Submit;
+  use action Approved;
+  use action Rejected;
+  use action Paid;
+  use action Withdraw;
+  use action Mass_approval;
+  use action CopyClaim;
+
+  use association _ZR_EXPENSE_LINE_KA { create; with draft; }
+}
+
+define behavior for ZC_EXPENSE_LINE_KA //alias <alias_name>
+{
+  use update;
+  use delete;
+  use association _ZR_EXPENSE_KA { with draft; }
+  use association _ZI_RECEIPT_KA { create; with draft; }
+}
+
+define behavior for ZC_RECEIPT_KA //alias <alias_name>
+{
+  use update;
+  use delete;
+
+  use association _ZR_EXPENSE_LINE_KA { with draft; }
+  use association _ZR_EXPENSE_KA { with draft; }
+}

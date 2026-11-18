@@ -1,0 +1,56 @@
+@Metadata.layer: #CORE 
+@UI.headerInfo: { typeName: 'Expense Line', typeNamePlural: 'Expense Lines',
+                  title: { value: 'line_num' }, description : { value: 'category' } }
+annotate entity ZC_EXPENSE_LINE_KA
+    with 
+{
+    @UI.facet: [
+    
+    { id: 'EXPENSELINE', position: 10, label: 'EXPENSE LINE Information',
+       purpose: #STANDARD, type: #IDENTIFICATION_REFERENCE },
+    { id: 'RECEIPT', label: 'RECEIPT', position: 10, 
+            purpose: #STANDARD, type: #LINEITEM_REFERENCE, targetElement: '_ZI_RECEIPT_KA' }
+        ]
+       
+    @UI.hidden: true
+    line_number;
+    @UI.hidden: true
+    ex_claim;
+    
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  @EndUserText.label: 'LINE NUMBER' 
+    line_num;
+    
+
+    @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+  @EndUserText.label: 'Expense Date'
+    expense_date;
+    @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  @EndUserText.label: 'Category'
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZCC_VH_CATEGORY_KA', element: 'category' } }]
+    category;
+      @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  @EndUserText.label: 'description'
+    description;
+    @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  @EndUserText.label: 'Amount'
+    amount;
+//    @UI.lineItem: [{ position: 60 }]
+//  @UI.identification: [{ position: 60 }]
+//  @EndUserText.label: 'currency'
+    @UI.hidden: true
+    currency;
+    @UI.lineItem: [{ position: 70 }]
+  @UI.identification: [{ position: 70 }]
+  @EndUserText.label: 'Receipt Required'
+    receipt_required;
+    @UI.lineItem: [{ position: 80 }]
+  @UI.identification: [{ position: 80 }]
+  @EndUserText.label: 'Number of Receipts'
+    number_of_receipts;
+}

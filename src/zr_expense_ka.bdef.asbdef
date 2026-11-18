@@ -1,0 +1,117 @@
+managed implementation in class zbp_r_expense_ka unique;
+strict ;
+with draft;
+with cross associations;
+
+define behavior for ZR_EXPENSE_KA //alias <alias_name>
+persistent table zexpense_db_ka
+draft table zdt_expense_ka
+lock master
+total etag local_last_change_on
+authorization master ( instance )
+etag master created_on
+{
+  create ( authorization : global );
+  update ( features : instance );
+  delete ( features : instance );
+  field ( numbering : managed, readonly ) ex_claim;
+  field ( mandatory ) employee_name , trip_purpose, trip_end_date, trip_start_date,
+  destination_country, currency;
+  field (readonly) claim_number, total_amount, status, submitted_on,
+  decision_date, rejection_reason, payment_date, payment_reference,
+  last_change_by, last_change_on, created_by, created_on, payment_date_2;
+
+  field ( features : instance ) currency;
+
+
+
+  association _ZR_EXPENSE_LINE_KA { create ( features : instance ); with draft; }
+
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit ;
+  draft action Resume;
+  draft determine action Prepare { validation trip_date ;  validation country_check;  validation mandatoryFields;
+  validation ZR_EXPENSE_LINE_KA~cat_desc;  validation ZR_EXPENSE_LINE_KA~EXP_DATE;  validation ZR_EXPENSE_LINE_KA~AMOUNT_CHK;
+   validation ZR_EXPENSE_LINE_KA~required_receipt;  validation ZR_EXPENSE_LINE_KA~total_Meals;  validation ZR_EXPENSE_LINE_KA~hotel_check;
+    validation ZR_EXPENSE_LINE_KA~mandatoryFields; validation ZI_RECEIPT_KA~receipt_size; validation ZI_RECEIPT_KA~mandatoryFields; }
+
+  determination ClaimNumber on save { create; }
+  determination claimcurr on modify {create;}
+  determination claimstatus on modify {create;}
+
+
+  validation trip_date on save { create; field trip_end_date; }
+  validation country_check on save { create; field destination_country;}
+  validation mandatoryFields on save { create; }
+
+  action ( features : instance ) Submit result [1] $self;
+  action ( features : instance ) Approved result [1] $self;
+  action ( features : instance ) Rejected parameter ZABS_REJECTION_KA result [1] $self;
+  action ( features : instance ) Paid parameter ZABS_PAID_KA result [1] $self;
+  action ( features : instance ) Withdraw result [1] $self;
+
+
+  static action Mass_approval parameter ZABS_MASS_APPROVAL_KA result[0..*] $self;
+
+  factory action CopyClaim [1];
+
+//  side effects { action Submit affects field status; }
+
+}
+
+define behavior for ZR_EXPENSE_LINE_KA //alias <alias_name>
+persistent table zexpense_line_ka
+draft table zdt_ex_line_ka
+lock dependent by _ZR_EXPENSE_KA
+authorization dependent by _ZR_EXPENSE_KA
+//etag master <field_name>
+{
+  update ( features : instance );
+  delete ( features : instance );
+  field (numbering : managed, readonly ) line_number;
+  field ( readonly ) ex_claim, line_num, receipt_required, number_of_receipts, currency;
+  field (mandatory) expense_date, category, amount;
+
+  association _ZR_EXPENSE_KA { with draft; }
+  association _ZI_RECEIPT_KA { create ( features : instance ); with draft;}
+
+  determination TOTALAMOUNT on modify { create;  field amount;}
+  determination lineNumber on modify {create; }
+//  determination category_description on modify { create; field  category; }
+  determination currency_ref on modify { create; }
+  determination R_REQ on modify { create; field amount; }
+
+  validation cat_desc on save { create; field  category, description ;  }
+  validation EXP_DATE on save { create; field expense_date; }
+  validation AMOUNT_CHK on save { create; }
+  validation required_receipt on save { create; field receipt_required; }
+  validation total_Meals on save { create; field category , amount, currency; }
+  validation hotel_check on save { create; field category; }
+  validation mandatoryFields on save { create; }
+
+}
+
+define behavior for ZI_RECEIPT_KA //alias <alias_name>
+persistent table zreceipt_ka
+draft table zdt_receipt_ka
+lock dependent by _ZR_EXPENSE_KA
+authorization dependent by _ZR_EXPENSE_KA
+//etag master uploaded_on
+{
+  update ( features : instance );
+  delete ( features : instance );
+  field ( numbering : managed, readonly ) receipt_uuid;
+  field ( readonly ) line_number, ex_claim ;
+  field (mandatory) receipt_file;
+  field (readonly)  uploaded_by, uploaded_on, file_name;
+
+  association _ZR_EXPENSE_LINE_KA { with draft; }
+  association _ZR_EXPENSE_KA {with draft;}
+
+  determination receipt_counter on modify { create; }
+
+  validation receipt_size on save { create; field receipt_file; }
+  validation mandatoryFields on save { create; }
+
+}

@@ -1,0 +1,6 @@
+@EndUserText.label: 'ESPENSES'
+define service ZSD_EXPENSE_KA {
+  expose ZC_EXPENSE_KA      as EXPENSE;
+  expose ZC_EXPENSE_LINE_KA as LINE;
+  expose ZC_RECEIPT_KA      as RECEIPT;
+}
